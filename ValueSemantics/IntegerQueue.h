@@ -10,13 +10,11 @@ class IntegerQueue //dynamic integer queue
         bool empty() const; //checks if q is empty
         void push(int enqueue); //adds to q
         int pop(); //takes from q
-        const IntegerQueue& operator=(const IntegerQueue &);
-    
+        const IntegerQueue& operator=(const IntegerQueue &); //assignment overload func
     private:
         int head;
         int tail;
         int qsize; //size of array
         int* data;   //array for queue
 };
-
 std::ostream& operator<<(std::ostream& cout, const IntegerQueue& q); //queue output

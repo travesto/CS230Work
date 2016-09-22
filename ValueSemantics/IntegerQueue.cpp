@@ -64,41 +64,41 @@ int IntegerQueue::pop() //dequeue
 }
 const IntegerQueue& IntegerQueue::operator=(const IntegerQueue& q) //queue assignment
 {
-    if (this->data != q.data)
+    if (this->data != q.data) //check if queue is being assigned to itself (ie r = r)
     {
-        this->head=q.head;
+        //assign this memebers with q's values
+        this->head=q.head; 
         this->tail=q.tail;
         this->qsize=q.qsize;
-        delete [] this->data;
-        this->data=new int [qsize];
-        for (int i=0; i < size(); i++)
+        delete [] this->data; //delete this->data incase there is dynam. data in previous q
+        this->data=new int [qsize]; //create new array qsize
+        for (int i=0; i < size(); i++) //copy data from q to this
         {
             data[i] = q.data[i]; 
         }
-        return *this;
+        return *this; //return deep copied q
     }
-    else
+    else //if assigning q to itself, just return q
     {
         return *this;
     }
 }
 std::ostream& operator<<(std::ostream& cout, const IntegerQueue& q) //queue output
 {
-    if (!q.empty())
+    if (!q.empty()) //check if queue is empty
     {
         IntegerQueue outq(q); //create copy of orig queue
         cout << "{";
-        while (outq.size() > 1) //pop queue in order
+        while (outq.size() > 1) //pop new queue in order
         {
             cout << outq.pop() << ",";
         }
         cout << outq.pop() << "}";
-        return cout;   
+        return cout;   //must return something since not void
     }
-    else
+    else //if empty cout brackets only
     {
         cout << "{}";
         return cout;
-    }
-    
+    }  
 }
