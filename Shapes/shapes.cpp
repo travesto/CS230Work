@@ -8,6 +8,8 @@ std::ostream render()
 
 Color Shape::color() { return c;}
 
+virtual void Shape::move() {}
+
 Box::Box()
 {
     Color Shape::color(Color) {}; //to set the color?

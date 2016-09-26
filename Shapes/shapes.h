@@ -8,14 +8,23 @@ enum Color
 class Shape
 {
     public:
-        void move;
+        void move();
         Color color() const; 
         double area() const;
         double perimeter() const;
     private:
         Color c;
 };
-class Box : virtual public Shape
+class Polygon : virtual public Shape
+{
+    public:
+        Polygon();
+        ~Polygon();
+    private:
+        int vertices[];
+        int vcount;
+};
+class Box : virtual public Polygon
 {
     public:
         Box();
@@ -26,7 +35,7 @@ class Box : virtual public Shape
         int right;
         int bottom;
 };
-class Circle : virtual public Shape
+class Circle : virtual public Polygon
 {
     public:
         Circle();
@@ -36,11 +45,11 @@ class Circle : virtual public Shape
         int center_y;
         float radius;
 };
-class Triangle :virtual public Shape
+class Triangle :virtual public Polygon
 {
     public:
-        Circle();
-        ~Circle();
+        Triangle();
+        ~Triangle();
     private:
         int corner1a;
         int corner1b;
@@ -48,12 +57,4 @@ class Triangle :virtual public Shape
         int corner2b;
         int corner3a;
         int corner3b;
-};
-class Polygon : virtual public Shape
-{
-    public:
-        Polygon();
-        ~Polygon();
-    private:
-        //come back to this later
 };
