@@ -1,11 +1,17 @@
 #include <iostream>
 #include "shapes.cpp"
+#include <cassert>
 
 int main()
 {
-    Shape* list[1];
-    list[0] = new Polygon(BLUE,pts,5);
-    // double pts[] = {1,1,7,2,3,5,6,8,4,3};
+    
+    double pts[] = {1,1,7,2,3,5,6,8,4,3};
+    Shape* s = new Polygon(BLUE, pts, 5);                        // of course you can't actually declare an abstract shape
+    s->color(BLUE);                  // set shape's color to BLUE
+    Color c = s->color();  
+    assert(c==BLUE);
+   
+   
     // Shape * list[100];
     // int count = 0;
     // list[count++] = new Box(BLUE,0,1,1,0);

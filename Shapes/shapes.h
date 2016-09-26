@@ -9,43 +9,64 @@ class Shape
 {
     public:
         void move();
-        Color color() const; 
+        Color color() const; //color getter
+        Color color(Color colour); //overloaded color setter 
         double area() const;
         double perimeter() const;
     private:
         Color c;
 };
-class Polygon : virtual public Shape
+class Polygon : public Shape
 {
     public:
-        Polygon();
+        Polygon(Color colour, double* pts,int v);
         ~Polygon();
+        double vertexX(int place) const;
+        double vertexY(int place) const;
+        void vertexX(int place, double coord);
+        void vertexY(int place, double coord);
+        int points() const;
     private:
-        int vertices[];
+        double* verticesX; //array of x vertices
+        double* verticesY; //array of y vertices
         int vcount;
 };
-class Box : virtual public Polygon
+class Box : public Polygon
 {
     public:
         Box();
         ~Box();
+        double left() const;
+        double top() const;
+        double right() const;
+        double bottom() const;
+        void left(double left);
+        void top(double top);
+        void right(double top);
+        void bottom(double bottom);
     private:
-        int left;
-        int top;
-        int right;
-        int bottom;
+        double left;
+        double top;
+        double right;
+        double bottom;
 };
-class Circle : virtual public Polygon
+class Circle : public Shape
 {
     public:
         Circle();
         ~Circle();
+        centerX() const;//get x
+        centerX(double x); //set x
+        centerY() const;//get y
+        centerY(double y); //set y
+        radius() const;//get radius
+        radius(double r); //set rad
     private:
-        int center_x;
-        int center_y;
-        float radius;
+        double center_x;
+        double center_y;
+        double radius;
 };
-class Triangle :virtual public Polygon
+class Triangle : public Polygon
 {
     public:
         Triangle();
