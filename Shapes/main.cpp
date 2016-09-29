@@ -1,5 +1,5 @@
 #include <iostream>
-#include "shapes.cpp"
+#include "Shapes.cpp"
 #include <cassert>
 
 int main()
@@ -23,17 +23,29 @@ int main()
     list[count++] = new Circle(WHITE,5,5,3);
     list[count++] = new Triangle(BLACK,1,1,5,1,3,3);
     list[count++] = new Polygon(GREEN,pts,5);
-    Circle c(BLUE,3,4,2.1);    
+    
     double distance = 0;
     double area = 0;
-    distance += c.perimeter();
-    area += c.area();
-    cout << area << endl << distance << endl;
-    c.render(cout);
-    c.move(3,4);
+    double test[] = {1,1,5,1,3,3};
+    Polygon p(BLACK,test,3);
+    int c = p.points();
+    p.render(cout);
     cout << endl;
-    c.render(cout);
+    distance += p.perimeter();
+    cout << "peri = " << distance;
+    area += p.area();
+    cout << endl << area << endl;
 
+    // Triangle t(WHITE,1,1,5,1,3,3);
+    // t.render(cout);
+    // // t.cornerX1(2.5);   
+    // // double cx1 = t.cornerX1(); 
+    // cout << endl;   
+    // t.render(cout);
+    // distance += t.perimeter();
+    // cout << "peri = " << distance;
+    // area += t.area();
+    // cout << endl << area << endl;
     // stringstream ss;
 
     // for (int i=0; i<count; i++) {

@@ -1,14 +1,12 @@
 #include <iostream>
-#include <string>
 
 enum Color {BLACK, RED, GREEN, YELLOW, BLUE, MANGENTA, CYAN, WHITE};
-string names[] = {"BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MANGENTA", "CYAN", "WHITE"};
+
 class Shape
 {
     public:
         Shape(Color colour) : c(colour) {}
         virtual ~Shape() {}
-       
         //color getters and setters
         Color color() const {return c;} //color getter
         void color(Color colour) {c = colour;} //overloaded color setter 
@@ -39,11 +37,10 @@ class Polygon : public Shape
         double perimeter() const;
         void render(std::ostream &os) const;
     private:
-        double* verticesX; //array of x vertices
-        double* verticesY; //array of y vertices
+        double* vertices; //array of x vertices
         int vcount;
 };
-class Box : public Polygon
+class Box : public Shape
 {
     public:
         Box(Color colour, double left, double top, double right, double bottom);
@@ -57,6 +54,9 @@ class Box : public Polygon
         void right(double r);
         void bottom(double b);
         void render(std::ostream &os) const;
+        void move(double dx, double dy);
+        double area() const;
+        double perimeter() const;
     private:
         double l, r, t, b;
 };
@@ -78,7 +78,7 @@ class Circle : public Shape
     private:
         double center_x, center_y, rad;
 };
-class Triangle : public Polygon
+class Triangle : public Shape
 {
     public:
         Triangle(Color colour, double corner1a, double corner1b, double corner2a, double corner2b, double corner3a, double corner3b);
@@ -98,6 +98,9 @@ class Triangle : public Polygon
         void cornerX3(double corner3a);
         void cornerY3(double corner3b);
         //others
+        void move(double dx, double dy);
+        double area() const;
+        double perimeter() const;
         void render(std::ostream &os) const;
     private:
         double corner1a, corner1b, corner2a, corner2b, corner3a, corner3b;
