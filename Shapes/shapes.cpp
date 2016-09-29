@@ -4,8 +4,8 @@
 #include "Shapes.h"
 
 const double pi = 3.1415926535;
-const std::string names[] = {"BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MANGENTA", "CYAN", "WHITE"};
-double absv(double points) //make abs
+const std::string names[] = {"BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN", "WHITE"};
+double absv(double points) //make abs for doubles
 {
     if (points < 0)
     {
@@ -13,66 +13,61 @@ double absv(double points) //make abs
     }
     return points;
 }
-Polygon::Polygon(Color colour, double* pts, int v) : Shape(colour)
+Polygon::Polygon(Color colour, double* pts, int v) : Shape(colour) //ctor
 {
-    color(colour); //set colour
     vertices = new double[v*2];
-    if (pts != NULL)
+    for (int i = 0; i < v*2; i++) //puts xy into array
     {
-        for (int i = 0; i < v*2; i++)
-        {
-            vertices[i] = pts[i];
-        }
+        vertices[i] = pts[i];
     }
-    vcount = v;
+    vcount = v; //number of vertices
 }
 Polygon::~Polygon()
 {
-    delete [] vertices;
+    delete [] vertices; //deletes xy array
     vertices = NULL;
 }
 //Poly Functions
     //Poly vcount
     int Polygon::points() const {return vcount;}
     //Poly getters
-    double Polygon::vertexX(int place) const {return vertices[place];}
-    double Polygon::vertexY(int place) const {return vertexX(place);}
+    double Polygon::vertexX(int place) const {return vertices[place*2];}
+    double Polygon::vertexY(int place) const {return vertices[place*2+1];}
     //Poly setters
-    void Polygon::vertexX(int place, double coord) {vertices[place] = coord;}
-    void Polygon::vertexY(int place, double coord) {vertexX(place, coord);}
+    void Polygon::vertexX(int place, double coord) {vertices[place*2] = coord;}
+    void Polygon::vertexY(int place, double coord) {vertices[place*2+1] = coord;}
     //Poly move
     void Polygon::move(double dx, double dy) 
     {
         for (int i = 0; i < vcount*2; i += 2)
         {
-            vertices[i] = vertices[i] + dx;
+            vertices[i] = vertices[i] + dx; //move x
         }   
         for (int i = 1; i < vcount*2; i += 2)
         {
-            vertices[i] = vertices[i] + dy;
+            vertices[i] = vertices[i] + dy;//move y
         }
     }
-    double Polygon::area() const 
+    double Polygon::area() const //modified bourke formula
     {
         double a = 0;
         int t = 0;
-        for (; t < (vcount*2)-2; t += 2)
+        for (; t < (vcount*2)-2; t += 2) 
         {
             a+= (vertices[t]*vertices[t+3])-(vertices[t+2]*vertices[t+1]);
         }
         a += (vertices[t]*vertices[1])-(vertices[t+1]*vertices[0]);
         return absv(a /= 2);
     }
-    double Polygon::perimeter() const 
+    double Polygon::perimeter() const //distance formula
     {
         double peri = 0;
         int i = 0;
         for (; i < (vcount*2)-2; i+=2)
         {
-            peri += std::sqrt(std::pow((vertices[i] - vertices[i+2]), 2)+(std::pow((vertices[i+1] - vertices[i+3]), 2))); //distance formula
+            peri += std::sqrt(std::pow((vertices[i] - vertices[i+2]), 2)+(std::pow((vertices[i+1] - vertices[i+3]), 2)));
         }
         peri += std::sqrt(std::pow((vertices[i] - vertices[0]), 2)+(std::pow((vertices[i+1] - vertices[1]), 2)));
-        //peri += std::fmod(peri, (vcount*2));
         return peri;
     }
     void Polygon::render(std::ostream &os) const 
@@ -81,8 +76,6 @@ Polygon::~Polygon()
         for (int i = 0; i < vcount*2; i++)
         {
             polyout[i] = vertices[i];
-            //cout << polyout[i] << endl;
-
         }
         os << "Polygon(" << names[color()] << "," << vcount;
         for (int i = 0; i < (vcount*2); i++)
@@ -90,19 +83,16 @@ Polygon::~Polygon()
             os << "," << polyout[i];
         }
         os << ")";
-        
         delete [] polyout;
         polyout = NULL;
     }
 //Circle Constructor
 Circle::Circle(Color colour, double x, double y, double r) : Shape(colour)
 {
-    color(colour);
     centerX(x);
     centerY(y);
     radius(r);
 }
-Circle::~Circle() {}
 //Circle Functions
     //circle getters
     double Circle::centerX() const {return center_x;}
@@ -120,18 +110,15 @@ Circle::~Circle() {}
     {
         os << "Circle(" << names[color()] << "," << center_x <<"," << center_y << "," << rad << ")";
     }
-
 //Box constructor
 Box::Box(Color colour, double izquierda, double arriba, double derecha, double butts) :
     Shape(colour)
 {
-    color(colour); //set colour
     l = izquierda;
     t = arriba;
     r = derecha;
     b = butts;
 }
-Box::~Box() {}
 //box functions
     //box getters
     double Box::left() const {return l;}
@@ -144,14 +131,28 @@ Box::~Box() {}
     void Box::right(double derecha) {r = derecha;}
     void Box::bottom(double butts) {b = butts;}
     //Box func
-    void Box::render(std::ostream &os) const { os << "Box(" << names[color()] << "," << left() <<"," << top() << "," << right() << "," << bottom() << ")";}
+    void Box::render(std::ostream &os) const 
+    { 
+        os << "Box(" << names[color()] << "," << left() <<"," << top() << "," << right() << "," << bottom() << ")";
+    }
     void Box::move(double dx, double dy) {l+=dx; r+=dx; t+=dy; b+=dy;}
-    double Box::area() const {double len = r-l; double width = t-b; double a = len*width; return a;}
-    double Box::perimeter() const {double len = absv(l-r); double width = absv(t-b); double p = (2*len)+(2*width); return p;}
+    double Box::area() const 
+    {
+        double len = r-l; 
+        double width = t-b; 
+        double a = len*width; 
+        return a;
+    }
+    double Box::perimeter() const 
+    {
+        double len = absv(l-r); 
+        double width = absv(t-b); 
+        double p = (2*len)+(2*width); 
+        return p;
+    }
 //Triangle constructor
 Triangle::Triangle(Color colour, double x1, double y1, double x2, double y2, double x3, double y3) : Shape(colour)
 {
-    color(colour);
     cornerX1(x1);
     cornerY1(y1);
     cornerX2(x2);
@@ -159,7 +160,6 @@ Triangle::Triangle(Color colour, double x1, double y1, double x2, double y2, dou
     cornerX3(x3);
     cornerY3(y3); 
 }
-Triangle::~Triangle() {}
 //Triangle Functions
     //Triangle getters
     double Triangle::cornerX1() const {return corner1a;}
@@ -191,15 +191,15 @@ Triangle::~Triangle() {}
         double a1 = absv(corner1b - corner2b);
         double a2 = absv(corner2b - corner3b);
         double a3 = absv(corner1b - corner3b);
-        
+        //find greatest distance for heighth
         if ((a1 >= a2) && (a1 >= a3)) {altura = a1;}
         else if ((a2 >= a1) && (a2 >= a3)) {altura = a2;}
         else {altura = a3;}
-
+       
         double b1 = absv(corner1a - corner2a);
         double b2 = absv(corner2a - corner3a);
         double b3 = absv(corner3a - corner1a);
-
+        //find greatest distance for base
         if ((b1 >= b2) && (b2 >= b3)) {base = b1;}
         else if ((b2 >= b1) && (b2 >= b3)) {base = b2;}
         else {base = b3;}
@@ -214,4 +214,7 @@ Triangle::~Triangle() {}
         peri += std::sqrt(std::pow((corner3a - corner1a), 2) + (std::pow((corner3b - corner1b), 2)));
         return peri;
     }
-    void Triangle::render(std::ostream &os) const {os << "Triangle(" << names[color()] << "," << corner1a << "," << corner1b << "," << corner2a << "," << corner2b << "," << corner3a << "," << corner3b << ")";}
+    void Triangle::render(std::ostream &os) const 
+    {
+        os << "Triangle(" << names[color()] << "," << corner1a << "," << corner1b << "," << corner2a << "," << corner2b << "," << corner3a << "," << corner3b << ")";
+    }
