@@ -14,27 +14,26 @@ int main()
     // circ->color(RED);
     // c = circ->color();
     // assert(c==RED);
-
-    double pts[] = {1,1,7,2,3,5,6,8,4,3};
-    Shape * list[100];
-    int count = 0;
-    list[count++] = new Box(BLUE,0,1,1,0);
-    list[count++] = new Box(CYAN,2,9,4,3);
-    list[count++] = new Circle(WHITE,5,5,3);
-    list[count++] = new Triangle(BLACK,1,1,5,1,3,3);
-    list[count++] = new Polygon(GREEN,pts,5);
-    
+    Box b(BLUE, 1,6,7,1); //l,t,r,b
+    b.render(cout);
+    cout << endl;
     double distance = 0;
     double area = 0;
-    double test[] = {1,1,5,1,3,3};
-    Polygon p(BLACK,test,3);
+    double test[] = {1,1,1,6,7,6,7,1};
+    Polygon p(GREEN,test,4);
     int c = p.points();
     p.render(cout);
     cout << endl;
     distance += p.perimeter();
-    cout << "peri = " << distance;
+    cout << "poly peri = " << distance<< endl;
     area += p.area();
-    cout << endl << area << endl;
+    cout << "poly area = " << area << endl;
+    double perim = 0;
+    double ar = 0;
+    perim = b.perimeter();
+    ar = b.area();
+    cout << "box perim = " << perim << endl;
+    cout << "box area = " << ar << endl;
 
     // Triangle t(WHITE,1,1,5,1,3,3);
     // t.render(cout);

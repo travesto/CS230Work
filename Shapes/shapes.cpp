@@ -5,6 +5,14 @@
 
 const double pi = 3.1415926535;
 const std::string names[] = {"BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MANGENTA", "CYAN", "WHITE"};
+double absv(double points) //make abs
+{
+    if (points < 0)
+    {
+        return points *= -1;
+    }
+    return points;
+}
 Polygon::Polygon(Color colour, double* pts, int v) : Shape(colour)
 {
     color(colour); //set colour
@@ -35,11 +43,11 @@ Polygon::~Polygon()
     //Poly move
     void Polygon::move(double dx, double dy) 
     {
-        for (int i = 0; i < vcount; i += 2)
+        for (int i = 0; i < vcount*2; i += 2)
         {
             vertices[i] = vertices[i] + dx;
         }   
-        for (int i = 1; i < vcount; i += 2)
+        for (int i = 1; i < vcount*2; i += 2)
         {
             vertices[i] = vertices[i] + dy;
         }
@@ -48,12 +56,12 @@ Polygon::~Polygon()
     {
         double a = 0;
         int t = 0;
-        for (; t < (vcount*2)-1; t += 2)
+        for (; t < (vcount*2)-2; t += 2)
         {
             a+= (vertices[t]*vertices[t+3])-(vertices[t+2]*vertices[t+1]);
         }
         a += (vertices[t]*vertices[1])-(vertices[t+1]*vertices[0]);
-        return a /= 2;
+        return absv(a /= 2);
     }
     double Polygon::perimeter() const 
     {
@@ -73,6 +81,7 @@ Polygon::~Polygon()
         for (int i = 0; i < vcount*2; i++)
         {
             polyout[i] = vertices[i];
+            //cout << polyout[i] << endl;
 
         }
         os << "Polygon(" << names[color()] << "," << vcount;
@@ -138,7 +147,7 @@ Box::~Box() {}
     void Box::render(std::ostream &os) const { os << "Box(" << names[color()] << "," << left() <<"," << top() << "," << right() << "," << bottom() << ")";}
     void Box::move(double dx, double dy) {l+=dx; r+=dx; t+=dy; b+=dy;}
     double Box::area() const {double len = r-l; double width = t-b; double a = len*width; return a;}
-    double Box::perimeter() const {double len = r-l; double width = t-b; double p = (2*len)*(2*width); return p;}
+    double Box::perimeter() const {double len = absv(l-r); double width = absv(t-b); double p = (2*len)+(2*width); return p;}
 //Triangle constructor
 Triangle::Triangle(Color colour, double x1, double y1, double x2, double y2, double x3, double y3) : Shape(colour)
 {
@@ -149,14 +158,6 @@ Triangle::Triangle(Color colour, double x1, double y1, double x2, double y2, dou
     cornerY2(y2);
     cornerX3(x3);
     cornerY3(y3); 
-}
-double absv(double points) //make abs
-{
-    if (points < 0)
-    {
-        return points *= -1;
-    }
-    return points;
 }
 Triangle::~Triangle() {}
 //Triangle Functions
