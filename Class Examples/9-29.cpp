@@ -16,5 +16,6 @@ int Example::statval = 1;
 int main()
 {
     Example e;
-    e.getval();
+    cout << e.getval() << endl;
+    cout << Example::getval() << endl;
 }
