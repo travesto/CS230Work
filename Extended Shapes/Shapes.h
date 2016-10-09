@@ -16,12 +16,35 @@ class Shape
         virtual double area() const = 0; //calculates area
         virtual double perimeter() const  = 0; //calculates perimeter
         virtual void render(std::ostream &os) const = 0; //diplays shape details
+        virtual bool inside(double dx, double dy) const = 0; //if x,y is within a shape perim
+        virtual double thickness() const = 0; //area / perim
+        virtual void colorAtPoint() const = 0; // ?
     private:
         //member variables
         Color c;
         Shape(const Shape& other); //disallow copy ctor
         void operator=(const Shape& other); //disallow equivalence
 };
+class Line : public Shape
+{
+    public:
+        Line(Color colour, double leftx, double lefty, double rightx, double righty);
+        //getters and setters
+        double leftx() const;
+        double lefty() const;
+        double rightx() const;
+        double righty();
+        void leftx(double lx);
+        void lefty(double ly);
+        void rightx(double rx);
+        void righy(double ry);
+        //other funcs
+        void render(std::ostream &os) const;
+        void move(double dx, double dy);
+        double perimeter() const; // can a line have a perim?
+    private:
+        double left_x, left_y, right_x, right_y;
+}
 class Polygon : public Shape
 {
     public:

@@ -110,6 +110,32 @@ Circle::Circle(Color colour, double x, double y, double r) : Shape(colour)
     {
         os << "Circle(" << names[color()] << "," << center_x <<"," << center_y << "," << rad << ")";
     }
+//Line ctor
+Line::Line(Color colour, double leftx, double lefty, double rightx, double righty) : Shape(colour)
+{
+    left_x = leftx;
+    left_y = lefty;
+    right_x = rightx;
+    right_y = righty;
+}
+//line functions
+    //getters
+    double Line::leftx() const {return left_x;}
+    double Line::lefty() const {return left_y;}
+    double Line::rightx() const {return right_x;}
+    double Line::righty() const {return right_y;}
+    //setters
+    void Line::leftx(double leftx) {left_x = leftx;}
+    void Line::lefty(double lefty) {left_y = lefty;}
+    void Line::rightx(double rightx) {right_x = rightx;}
+    void Line::righty(double righty) {right_y = righty;}
+    //other funcs
+    void Line::render(std::ostream &os) const
+    {
+
+    }
+    void Line::move(double dx, double dy) {};
+    double Line::perimeter() const {};
 //Box constructor
 Box::Box(Color colour, double izquierda, double arriba, double derecha, double butts) :
     Shape(colour)
