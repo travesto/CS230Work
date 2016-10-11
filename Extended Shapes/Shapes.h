@@ -1,6 +1,6 @@
 #include <iostream>
-
-enum Color {BLACK, RED, GREEN, YELLOW, BLUE, MANGENTA, CYAN, WHITE}; //enum for color
+//color at point is static
+enum Color {BLACK, RED, GREEN, YELLOW, BLUE, MANGENTA, CYAN, WHITE, INVALID}; //enum for color
 
 //Shape
 class Shape 
@@ -17,34 +17,61 @@ class Shape
         virtual double perimeter() const  = 0; //calculates perimeter
         virtual void render(std::ostream &os) const = 0; //diplays shape details
         virtual bool inside(double dx, double dy) const = 0; //if x,y is within a shape perim
-        virtual double thickness() const = 0; //area / perim
-        virtual void colorAtPoint() const = 0; // ?
+        double thickness() const {return area()/perimeter();} //area / perim
+        static Color colorAtPoint(Shape* array[], int num, double x, double y); // ?
     private:
         //member variables
         Color c;
         Shape(const Shape& other); //disallow copy ctor
         void operator=(const Shape& other); //disallow equivalence
 };
+class RoundBox : public Shape
+{
+    public:
+        RoundBox(Color colour, double left, double top, double right, double bottom, double rad);
+        //getters and setters
+        double left() const;
+        double top() const;
+        double right() const;
+        double bottom() const;
+        double radius() const;
+        void left(double l);
+        void top(double t);
+        void right(double r);
+        void bottom(double b);
+        void radius(double rad);
+        //others
+        void render(std::ostream &os) const;
+        void move(double dx, double dy);
+        double area() const;
+        double perimeter() const;
+        bool inside(double dx, double dy) const; //if x,y is within a shape perim
+    private:
+        double l, t, r, b, rad;
+    
+};
 class Line : public Shape
 {
     public:
         Line(Color colour, double leftx, double lefty, double rightx, double righty);
         //getters and setters
-        double leftx() const;
-        double lefty() const;
-        double rightx() const;
-        double righty();
-        void leftx(double lx);
-        void lefty(double ly);
-        void rightx(double rx);
-        void righy(double ry);
+        double end1X() const;
+        double end1Y() const;
+        double end2X() const;
+        double end2Y() const;
+        void end1X(double lx);
+        void end1Y(double ly);
+        void end2X(double rx);
+        void end2Y(double ry);
         //other funcs
+        double area() const;
         void render(std::ostream &os) const;
         void move(double dx, double dy);
         double perimeter() const; // can a line have a perim?
+        bool inside(double dx, double dy) const; //if x,y is within a shape perim
     private:
         double left_x, left_y, right_x, right_y;
-}
+};
 class Polygon : public Shape
 {
     public:
@@ -62,6 +89,8 @@ class Polygon : public Shape
         double area() const;
         double perimeter() const;
         void render(std::ostream &os) const;
+        bool inside(double dx, double dy) const; //if x,y is within a shape perim
+        double thickness() const; //area / perim
     private:
         double* vertices; //array of xy coords
         int vcount; //# vertices
@@ -84,6 +113,7 @@ class Box : public Shape
         void move(double dx, double dy);
         double area() const;
         double perimeter() const;
+        bool inside(double dx, double dy) const; //if x,y is within a shape perim
     private:
         double l, r, t, b;
 };
@@ -102,6 +132,7 @@ class Circle : public Shape
         double area() const;
         double perimeter() const;
         void render(std::ostream &os) const;
+        bool inside(double dx, double dy) const; //if x,y is within a shape perim
     private:
         double center_x, center_y, rad;
 };
@@ -128,6 +159,7 @@ class Triangle : public Shape
         double area() const;
         double perimeter() const;
         void render(std::ostream &os) const;
+        bool inside(double dx, double dy) const; //if x,y is within a shape perim
     private:
         double corner1a, corner1b, corner2a, corner2b, corner3a, corner3b;
 };

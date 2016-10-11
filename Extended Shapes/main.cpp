@@ -5,20 +5,32 @@
 
 int main()
 {
-    std::string name[]={"BLACK","RED","GREEN","YELLOW","BLUE","MAGENTA","CYAN","WHITE"};
-    for (int i=0; i<8; i++) {
-        Box b((Color)i,-1,2,3,-4);
-        //std::stringstream ss;
-        b.render(cout);
-        cout << " = " ;
-        //assert(ss.str() == 
-        cout << "Box("+name[i]+",-1,2,3,-4)" << endl;
-        // b.right(7);
-        // b.top(-5);
-        // b.color((Color)((i+1)%8));
-        // ss.str("");
-        // b.render(ss);
-    }
+    RoundBox b(BLUE,1,5,3,-1,1.5);
+    cout << b.area() << std::endl;
+    cout << b.perimeter() << std::endl;
+    cout << b.thickness() << std::endl;
+    b.render(cout);
+    cout << endl;
+    Line ln(RED,1,5,3,-1);
+    ln.render(cout);
+    Shape* list[1];
+    list[0] = new Box(BLUE,0,5,5,0);
+    cout << Shape::colorAtPoint(list,1,2.5,2.5);
+
+    // std::string name[]={"BLACK","RED","GREEN","YELLOW","BLUE","MAGENTA","CYAN","WHITE"};
+    // for (int i=0; i<8; i++) {
+    //     Box b((Color)i,-1,2,3,-4);
+    //     //std::stringstream ss;
+    //     b.render(cout);
+    //     cout << " = " ;
+    //     //assert(ss.str() == 
+    //     cout << "Box("+name[i]+",-1,2,3,-4)" << endl;
+    //     // b.right(7);
+    //     // b.top(-5);
+    //     // b.color((Color)((i+1)%8));
+    //     // ss.str("");
+    //     // b.render(ss);
+    // }
     /*
     Box b(BLUE,1,2,3,4);
 	Circle c(BLUE,1,2,3);
