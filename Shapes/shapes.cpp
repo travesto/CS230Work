@@ -217,4 +217,4 @@ Triangle::Triangle(Color colour, double x1, double y1, double x2, double y2, dou
     void Triangle::render(std::ostream &os) const 
     {
         os << "Triangle(" << names[color()] << "," << corner1a << "," << corner1b << "," << corner2a << "," << corner2b << "," << corner3a << "," << corner3b << ")";
-    }
+}
