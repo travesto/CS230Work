@@ -17,15 +17,12 @@ Color Shape::colorAtPoint(Shape* array[], int num, double x, double y)
 {
     for (int i = 0; i < num; i++)
     {
-         if (array[i]->inside(x,y))
+        if (array[i]->inside(x,y))
         {
             return array[i]->color();
         }
-        else 
-        {
-            return INVALID;
-        }
     }
+    return INVALID;
 }
 Polygon::Polygon(Color colour, double* pts, int v) : Shape(colour) //ctor
 {
@@ -102,18 +99,16 @@ Polygon::~Polygon()
     }
     bool Polygon::inside(double dx, double dy) const //if x,y is within a shape perim
     {
-        int i, c = 0;
-        int j = vcount - 1;
-        for (i = 0, j; i < vcount; j = i) 
+        int i,j, delta = 0;
+        for (i = 0, j = vcount-1; i < vcount; j = i++) 
         {
-            if ( ((vertices[i+1]>dy) != (vertices[j+1]>dy)) &&
-            (dx < (vertices[j]-vertices[i]) * (dy-vertices[i+1]) / (vertices[j+1]-vertices[i+1]) + vertices[i]) )
+            if ( ((vertexY(i)>dy) != (vertexY(j)>dy)) &&
+	 (dx < (vertexX(j)-vertexX(i)) * (dy-vertexY(i)) / (vertexY(j)-vertexY(i)) + vertexX(i)))
             {
-                c = !c;
+                delta = !delta;
             }
-            i +=2;
         }
-        if (c == 1)
+        if (delta == 1)
         {
             return true;
         }
@@ -182,7 +177,7 @@ RoundBox::RoundBox(Color colour, double izquierda, double arriba, double derecha
     {
         double len = r-l;
         double width = t-b;
-        double a = ((len-2*rad)+2*(len-2*rad*rad)+2*(width-2*rad*rad)+2*pi*rad*rad);
+        double a = len*width - 4*rad*rad + pi*rad*rad;
         return a;
     }
     void RoundBox::move(double dx, double dy) 
@@ -201,7 +196,45 @@ RoundBox::RoundBox(Color colour, double izquierda, double arriba, double derecha
     }
     bool RoundBox::inside(double dx, double dy) const //if x,y is within a shape perim
     {
-        
+        bool in = false, circ = false;
+        Box rb(BLUE, l, t, r, b);
+        if (rb.inside(dx,dy)) //check if in box
+        {
+            in = true;
+        }
+        if (dx > (r-rad) && dy > (t-rad)) // check corner 1
+        {
+            if (std::pow((dx-(r-rad)),2)+(std::pow((dy-(t-rad)),2) < rad*rad))
+            {
+                circ = true;
+            }
+        }
+        else if (dx > (l+rad) && dy > (t-rad)) // check corner 2
+        {
+            if (std::pow((dx-(l+rad)),2)+(std::pow((dy-(t-rad)),2) < rad*rad))
+            {
+                circ = true;
+            }
+        }
+        else if (dx > (r-rad) && dy > (b+rad)) // check corner 3
+        {
+            if (std::pow((dx-(r-rad)),2)+(std::pow((dy-(b+rad)),2) < rad*rad))
+            {
+                circ = true;
+            }
+        }
+        else if (dx > (l+rad) && dy > (b+rad)) // check corner 1
+        {
+            if (std::pow((dx-(l+rad)),2)+(std::pow((dy-(b+rad)),2) < rad*rad))
+            {
+                circ = true;
+            }
+        }
+        if (circ && in)
+        {
+            in = true;
+        }
+        return in;
     } 
 //Line ctor
 Line::Line(Color colour, double leftx, double lefty, double rightx, double righty) : Shape(colour)
@@ -234,8 +267,13 @@ Line::Line(Color colour, double leftx, double lefty, double rightx, double right
         right_x += dx;
         right_y += dy;
     }
-    double Line::perimeter() const {return 0;} //can it have perim?
-    bool Line::inside(double dx, double dy) const {return 0;} //if x,y is within a shape perim 
+    double Line::perimeter() const 
+    {
+        double length;
+        length = std::sqrt(std::pow((right_x-left_x),2)+(std::pow((right_y-left_y),2)));
+        return length;
+    } 
+    bool Line::inside(double dx, double dy) const {double filler = dx; filler = dy; return 0;} //if x,y is within a shape perim 
     double Line::area() const {return 0;}
 //Box constructor
 Box::Box(Color colour, double izquierda, double arriba, double derecha, double butts) :
@@ -351,23 +389,7 @@ Triangle::Triangle(Color colour, double x1, double y1, double x2, double y2, dou
     }
     bool Triangle::inside(double dx, double dy) const //if x,y is within a shape perim
     {
-        double vertx[] = {corner1a, corner2a, corner3a};
-        double verty[] = {corner1b, corner2b, corner3b};
-        int i, c = 0;
-        int j = 2;
-        for (i = 0, j; i < 3; j = i++) 
-        {
-            if (((verty[i]>dy) != (verty[j]>dy)) && (dx < (vertx[j]-vertx[i]) * (dy-verty[i]) / (verty[j]-verty[i])))
-            {
-                c = !c;
-            }
-        }
-        if (c == 1)
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
+        double verts[6] = {corner1a, corner1b, corner2a, corner2b, corner3a, corner3b};
+        Polygon triangle(BLUE, verts, 3);
+        return triangle.inside(dx, dy);
     } 

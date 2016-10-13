@@ -5,17 +5,29 @@
 
 int main()
 {
-    RoundBox b(BLUE,1,5,3,-1,1.5);
-    cout << b.area() << std::endl;
-    cout << b.perimeter() << std::endl;
-    cout << b.thickness() << std::endl;
-    b.render(cout);
-    cout << endl;
-    Line ln(RED,1,5,3,-1);
-    ln.render(cout);
-    Shape* list[1];
-    list[0] = new Box(BLUE,0,5,5,0);
-    cout << Shape::colorAtPoint(list,1,2.5,2.5);
+    Box b(BLUE,1,4,3,2);
+	Circle c(BLUE,1,2,3);
+	Triangle t(BLUE,1,2,3,4,3,2);
+	double pts[] = {1,2,3,4,5,6,7,8,9,10};
+	Polygon p(BLUE,pts,5);
+    Box bb(BLUE,0,1,1,0);
+    Circle cc(BLACK,5,5,2);
+    Triangle tt(RED,0,0,10,0,0,1);
+	double pts2[] = {0,0,1,0,1,1, 0,2,0,1};
+    Polygon pp(YELLOW,pts2,5);
+	RoundBox rb(WHITE,0,3,4,0,1);
+    assert(fabs(rb.thickness()-((8.0+M_PI)/(6.0+2.0*M_PI))) < 0.0000001);
+    // RoundBox b(BLUE,1,5,3,-1,1.5);
+    // cout << b.area() << std::endl;
+    // cout << b.perimeter() << std::endl;
+    // cout << b.thickness() << std::endl;
+    // b.render(cout);
+    // cout << endl;
+    // Line ln(RED,1,5,3,-1);
+    // ln.render(cout);
+    // Shape* list[1];
+    // list[0] = new Box(BLUE,0,5,5,0);
+    // cout << endl << Shape::colorAtPoint(list,1,2.5,2.5);
 
     // std::string name[]={"BLACK","RED","GREEN","YELLOW","BLUE","MAGENTA","CYAN","WHITE"};
     // for (int i=0; i<8; i++) {

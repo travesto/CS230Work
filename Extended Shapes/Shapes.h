@@ -1,6 +1,6 @@
 #include <iostream>
 //color at point is static
-enum Color {BLACK, RED, GREEN, YELLOW, BLUE, MANGENTA, CYAN, WHITE, INVALID}; //enum for color
+enum Color {BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, INVALID}; //enum for color
 
 //Shape
 class Shape 
@@ -90,7 +90,6 @@ class Polygon : public Shape
         double perimeter() const;
         void render(std::ostream &os) const;
         bool inside(double dx, double dy) const; //if x,y is within a shape perim
-        double thickness() const; //area / perim
     private:
         double* vertices; //array of xy coords
         int vcount; //# vertices
