@@ -5,6 +5,11 @@
 
 int main()
 {
+    Shape * list[2];
+    list[0] = new Box(GREEN, 0, 1, 1, 0);
+    list[1] = new Circle(YELLOW, 2, 2, 2);
+    Group g(BLUE, 2, list);
+    
     Box b(BLUE,1,4,3,2);
 	Circle c(BLUE,1,2,3);
 	Triangle t(BLUE,1,2,3,4,3,2);

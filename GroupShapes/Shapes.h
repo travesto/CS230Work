@@ -25,14 +25,20 @@ class Shape
         Shape(const Shape& other); //disallow copy ctor
         void operator=(const Shape& other); //disallow equivalence
 };
-class Groups : public Shape //a group of shapes
+class Group : public Shape //a group of shapes
 {
     public:
-        Groups(Color colour, int numShapesInGoup, double* pts) //ctor
+        Group(Color colour, int numShapesInGoup, Shape* pts[]); //ctor
+        ~Group(); //dtor
+        void move(double dx, double dy); // shift entire shape by xy
+        double area() const; //calculates area
+        double perimeter() const; //calculates perim
+        void render(std::ostream &os) const; //writes shape characteristics
+        bool inside(double dx, double dy) const; //test if x,y is within a shape perim
     private:
-        //?
-        
-}
+        int numShapesInGroup;
+        Shape* arrayOfShapes;
+};
 //makes a box w/rounded eges
 class RoundBox : public Shape
 {

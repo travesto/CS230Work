@@ -24,6 +24,28 @@ Color Shape::colorAtPoint(Shape* array[], int num, double x, double y)
     }
     return INVALID;
 }
+Group::Group(Color colour, int numOfShapes, Shape* array[]) : Shape(colour)
+{
+    numShapesInGroup = numOfShapes;
+
+//     for (int i = 0; i < numShapesInGroup; i++)
+//     {
+//         arrayOfShapes[i] = array[i];
+//     }
+}
+Group::~Group()
+{
+    //delete [] arrayOfShapes;
+    //arrayOfShapes = NULL;
+}
+//Group funcs
+    //move all shapes in group
+    void Group::move(double dx, double dy) {};
+    double Group::area() const {};
+    double Group::perimeter() const {};
+    void Group::render(std::ostream &os) const {};
+    bool Group::inside(double dx, double dy) const {};
+
 Polygon::Polygon(Color colour, double* pts, int v) : Shape(colour) //ctor
 {
     vertices = new double[v*2];
