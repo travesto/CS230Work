@@ -26,6 +26,7 @@ cout << "Group perimeter: " << g.perimeter() << "\n";
 	
 g.move(1,1);
 g.render(cout); cout << "\n";
+-- Group(BLUE,2,Box(BLUE,1,2,2,1),Circle(BLUE,3,3,2))
 g.color(RED);
 g.render(cout); cout << "\n";
 

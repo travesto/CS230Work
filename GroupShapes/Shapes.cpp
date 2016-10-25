@@ -27,25 +27,90 @@ Color Shape::colorAtPoint(Shape* array[], int num, double x, double y)
 Group::Group(Color colour, int numOfShapes, Shape* array[]) : Shape(colour)
 {
     numShapesInGroup = numOfShapes;
-
-//     for (int i = 0; i < numShapesInGroup; i++)
-//     {
-//         arrayOfShapes[i] = array[i];
-//     }
+    arrayOfShapes = array;
+    color(colour);
 }
 Group::~Group()
 {
-    //delete [] arrayOfShapes;
-    //arrayOfShapes = NULL;
+    for (int i = 0; i < numShapesInGroup; i++)
+    {
+        delete arrayOfShapes[i];
+    }
+    arrayOfShapes = NULL;
 }
 //Group funcs
     //move all shapes in group
-    void Group::move(double dx, double dy) {};
-    double Group::area() const {};
-    double Group::perimeter() const {};
-    void Group::render(std::ostream &os) const {};
-    bool Group::inside(double dx, double dy) const {};
-
+    void Group::color(Color colour)
+    {
+        for (int i = 0; i < numShapesInGroup; i++)
+        {
+            arrayOfShapes[i]->color(colour);
+        }
+        Shape::color(colour);
+    }
+    void Group::move(double dx, double dy) 
+    {
+        for (int i = 0; i < numShapesInGroup; i++)
+        {
+            arrayOfShapes[i]->move(dx, dy);
+        }
+    }
+    double Group::area() const 
+    {
+        double total = 0;
+        for (int i = 0; i < numShapesInGroup; i++)
+        {
+            total += arrayOfShapes[i]->area();   
+        }
+        return total;
+    }
+    double Group::perimeter() const 
+    {
+        double perim = 0;
+        for (int i = 0; i < numShapesInGroup; i++)
+        {
+            perim += arrayOfShapes[i]->perimeter();
+        }
+        return perim;
+    }
+    void Group::render(std::ostream &os) const 
+    {
+        os << "Group(" << names[color()] << "," << numShapesInGroup;
+        for (int i = 0; i < numShapesInGroup; i++)
+        {
+            os << ",";
+            arrayOfShapes[i]->render(os);
+        }
+        os << ")";
+    }
+    bool Group::inside(double dx, double dy) const 
+    {
+        for (int i = 0; i < numShapesInGroup; i++)
+        {
+            if (arrayOfShapes[i]->inside(dx,dy))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    Shape* Group::shape(int q) const
+    {
+        return arrayOfShapes[q];
+    }
+    int Group::shapes() const
+    {
+        return numShapesInGroup;
+    }
+    void Group::shapes(int z, Shape* list[])
+    {
+        for (int i = 0; i < numShapesInGroup; i++)
+        {
+            delete arrayOfShapes[i];
+        }
+        numShapesInGroup = z;
+        arrayOfShapes = list;
+    }
 Polygon::Polygon(Color colour, double* pts, int v) : Shape(colour) //ctor
 {
     vertices = new double[v*2];

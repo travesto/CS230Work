@@ -1,5 +1,6 @@
 #include <iostream>
 //color at point is static
+
 enum Color {BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, INVALID}; //enum for color
 
 //Shape
@@ -9,8 +10,8 @@ class Shape
         Shape(Color colour) : c(colour) {}
         virtual ~Shape() {};
         //color getters and setters
-        Color color() const {return c;} //color getter
-        void color(Color colour) {c = colour;} //color setter 
+        virtual Color color() const {return c;} //color getter
+        virtual void color(Color colour) {c = colour;} //color setter 
         //shape func
         virtual void move(double dx, double dy) = 0; //shifts entire shape by dx,dy
         virtual double area() const = 0; //calculates area
@@ -35,9 +36,14 @@ class Group : public Shape //a group of shapes
         double perimeter() const; //calculates perim
         void render(std::ostream &os) const; //writes shape characteristics
         bool inside(double dx, double dy) const; //test if x,y is within a shape perim
+        Shape* shape(int q) const; //render shape at index
+        int shapes() const; //returns num shapes
+        void shapes(int z, Shape* list[]); //replaces shapes in array
+        void color(Color colour); //setter
+        Color color() const { return Shape::color();} //getter
     private:
         int numShapesInGroup;
-        Shape* arrayOfShapes;
+        Shape** arrayOfShapes;
 };
 //makes a box w/rounded eges
 class RoundBox : public Shape
