@@ -33,11 +33,17 @@ class Tuple
         //ctor
         
         //data access and manip funcs
-        
+        //assignment operator overload
         #ifdef DEBUG
         TupleData<T>& implementation() const { return *data;}
         #endif
     private:
         TupleData<T>* data;
-}
+};
+//overloaded math operators
+template<class T> Tuple<T> operator+(const Tuple<T>& a, const Tuple<T>& b);
+
 int main()
+{
+
+}
