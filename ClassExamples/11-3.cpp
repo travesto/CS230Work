@@ -25,4 +25,12 @@ int main()
     v.push_back(4);
     v.push_back(2);
     v.push_back(9);
+
+    vector<int>::iterator itr1 = v.begin();
+    vector<int>::iterator itr2 = v.end();
+
+    for (vector<int>::iterator itr = itr1, int i = 0; itr != itr2; itr++)
+    {
+        cout << v[i] << " " << *itr << endl;
+    }
 }
