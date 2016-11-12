@@ -10,27 +10,33 @@ class TupleData
         TupleData(int n) //creates empty tuple of n size
         {
             cardinality = n;
-            T* zero = new T [n];
+            uses = 1;
+            items = new T [n];
             for (int i = 0; i < cardinality; i++)
             {
-                zero[i] = 0;
+                items[i] = 0;
             }
-            uses = 0;
-            incrementUse();
+            
         }
         TupleData(T* list, int n) //creates tuple with elements from list
         {
             cardinality = n;
-            items = list;
-            uses = 0;
-            incrementUse();
+            uses = 1;
+            items = new T [n];
+            for (int i = 0; i < cardinality; i++)
+            {
+                items[i] = list[i];
+            }
         }
         TupleData(const TupleData& other) //copy ctor
         {
-            items = other.items;
-            cardinality = other.cardinality;
-            uses = other.uses;
-            incrementUse();
+            this->cardinality = other.cardinality;
+            this->uses = 1;
+            items = new T [cardinality];
+            for (int i = 0; i < cardinality; i++)
+            {
+                items[i] = other.items[i];
+            }
         }
         ~TupleData()
         {
@@ -65,44 +71,75 @@ class Tuple
         //ctor
         Tuple(int n)
         {
-            data = new TupleData<T>(n);   
+            data = new TupleData<T>(n);  
         }
         Tuple(T* list, int n)
         {
-            data = new TupleData<T>(list, n);
+            data = new TupleData<T>(list, n); 
+
+        }
+        Tuple(const Tuple<T>& copy) //ctor
+        {
+            data = copy.data;
+            data->incrementUse();
         }
         ~Tuple()
         {
-            data = NULL;
+            data->decrementUse();
         }
         //data access and manip funcs
         int size()const { return data->size();}
-        int useCount() { return data->useCount();}
+        int useCount()const { return data->useCount();}
         T magnitude() const//euclidean norm
         {
-            T mag = 0;
+            double mag = 0;
             for (int i = 0; i < data->size(); i++)
             {
-                mag += (T)(pow((*data)[i], 2.0));
+                mag += pow((*data)[i], 2);
             }
-            return (T)(sqrt(mag));
+            return (T)std::sqrt(mag);
         }
         //assignment operator overload
         Tuple<T>& operator=(const Tuple<T>& b) 
         { 
+            if (this == &b)
+            {
+                return *this;
+            }
             for (int i = 0; i < (this->size() >= b.size() ? this->size() : b.size()); i++)
             {
                 (*this)[i] = b[i];
             }
-            data->decrementUse();//dec a 
+            this->data->decrementUse();//dec a 
             b.data->incrementUse();//inc b
-            data = b.data;
+            this->data = b.data;
             return (*this);
         }
-
+        bool operator==(const Tuple& other) const
+        {
+            int tamano = size()>other.size() ? size() : other.size();
+            for (int i=0; i<tamano; i++)
+            {    
+                if ((*this)[i] != other[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        bool operator!=(const Tuple<T>& other) const //not equal
+        {
+            return !((*this) == other);
+        }
         T& operator[](int i) 
         { 
-            if (i <= size() && i >= 0)
+            if (data->useCount() > 1)
+            {
+                TupleData<T>* dota2 = new TupleData<T>(*data);
+                data->decrementUse();
+                this->data = dota2;
+            }
+            if (i < data->size() && i >= 0)
             {
                 return (*data)[i];
             }
@@ -115,7 +152,7 @@ class Tuple
         }
         const T& operator[](int i) const
         { 
-            if (i <= size() && i >= 0)
+            if (i < data->size() && i >= 0)
             {
                 return (*data)[i];
             }
@@ -150,7 +187,7 @@ Tuple<T>& operator+=(Tuple<T>& a, const Tuple<T>& b) //add
     return a;
 }
 template<class T> 
-Tuple<T> operator*(const Tuple<T>& a, const Tuple<T>&b) //dot prod
+T operator*(const Tuple<T>& a, const Tuple<T>& b) //dot prod
 {
     T dotProduct = 0;
     for (int i = 0; i < (a.size() >= b.size() ? a.size() : b.size()); i++)
@@ -160,7 +197,7 @@ Tuple<T> operator*(const Tuple<T>& a, const Tuple<T>&b) //dot prod
     return dotProduct;
 }
 template<class T>
-Tuple<T> operator*(double x, const Tuple<T>&a)
+Tuple<T> operator*(T x, const Tuple<T>& a)
 {
     Tuple<T> scalarProd = Tuple<T>(a.size());
     for (int i = 0; i < a.size; i++)
@@ -170,42 +207,21 @@ Tuple<T> operator*(double x, const Tuple<T>&a)
     return scalarProd;
 }
 template<class T>
-Tuple<T> operator*(const Tuple<T>&a, double x)
+Tuple<T> operator*(const Tuple<T>& a, T x)
 {
     Tuple<T> scalarProd = Tuple<T>(a.size());
-    for (int i = 0; i < a.size; i++)
+    for (int i = 0; i < a.size(); i++)
     {
         scalarProd[i] = a[i]*x;
     }
     return scalarProd;
 }
 template<class T>
-Tuple<T>& operator*=(Tuple<T>&a, double x)
+Tuple<T>& operator*=(Tuple<T>& a, T x)
 {
-    for (int i = 0; i < a.size; i++)
+    for (int i = 0; i < a.size(); i++)
     {
         a[i] = a[i]*x;
     }
     return a;
-}
-template<class T>
-bool operator==(const Tuple<T>& a, const Tuple<T>&b) //equivalence
-{
-    bool equal = false;
-    if (a.size() == b.size())
-    {
-        for (int i = 0; i < a.size(); i++)
-        {
-            if (a[i] == b[i])
-            {
-                equal = true;
-            }
-        }
-    }
-    return equal;
-}
-template<class T>
-bool operator!=(const Tuple<T>& a, const Tuple<T>& b) //not equal
-{
-    return !(a == b);
 }
