@@ -11,14 +11,16 @@ class mySingleton
         //stop the compiler generating methods of copy the object
         mySingleton(mySingleton const& copy);   //not implemented
         mySingleton& operator=(mySingleton const& copy);    //not implmented
+         static mySingleton instance;
     public:
         static mySingleton& getInstance();
             //The only instance. Guaranteed to be lazy initialized and that it will be destroyed correctly
-        static mySingleton instance;
-        return instance;
 };
-
-mySingleton::getInstance();
+mySingleton::instance = mySingleton;
+mySingleton::getInstance()
+{
+    return instance;
+}
 
 int main()
 {
